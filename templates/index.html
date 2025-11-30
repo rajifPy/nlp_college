@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}SDGs Extractor - Upload Document{% endblock %}
+
+{% block content %}
+<div class="upload-section">
+    <div class="upload-container">
+        <div class="upload-icon">
+            <i class="fas fa-file-pdf"></i>
+        </div>
+        <h2>Upload PDF Document</h2>
+        <p class="upload-description">Upload your research paper, report, or document to analyze its alignment with Sustainable Development Goals (SDGs).</p>
+        
+        <form id="uploadForm" method="POST" enctype="multipart/form-data" action="{{ url_for('upload_file') }}">
+            <div class="file-upload">
+                <input type="file" id="fileInput" name="file" accept=".pdf" required>
+                <label for="fileInput" class="file-label">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Choose PDF File</span>
+                </label>
+                <div id="fileName" class="file-name">No file selected</div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary upload-btn">
+                <i class="fas fa-sync-alt"></i>
+                <span>Analyze Document</span>
+            </button>
+        </form>
+    </div>
+    
+    <div class="features-section">
+        <h3>Key Features</h3>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-microscope"></i>
+                </div>
+                <h4>PDF Extraction</h4>
+                <p>Automatically extracts title, abstract, and keywords using PyMuPDF</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h4>AI Analysis</h4>
+                <p>Uses your trained machine learning model for accurate SDG detection</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <h4>Top 3 SDGs</h4>
+                <p>Displays the three most relevant Sustainable Development Goals</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h4>Explainable Results</h4>
+                <p>Clear explanations with confidence levels and matched keywords</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

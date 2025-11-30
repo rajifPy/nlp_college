@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}SDGs Extractor - History{% endblock %}
+
+{% block content %}
+<div class="history-section">
+    <div class="history-header">
+        <h2><i class="fas fa-history"></i> Analysis History</h2>
+        <p>View your previous SDG analyses and download results</p>
+    </div>
+    
+    {% if extractions %}
+    <div class="history-table-container">
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Document</th>
+                    <th>Date</th>
+                    <th>Top SDGs</th>
+                    <th>Confidence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for extraction in extractions %}
+                <tr>
+                    <td>
+                        <div class="document-info">
+                            <i class="fas fa-file-pdf"></i>
+                            <span>{{ extraction.document_name }}</span>
+                        </div>
+                    </td>
+                    <td>{{ extraction.created_at[:10] }}</td>
+                    <td>
+                        {% set sdg_results = extraction.sdg_results if extraction.sdg_results else [] %}
+                        {% for sdg in sdg_results[:3] %}
+                        <span class="sdg-badge">SDG {{ sdg.sdg_number }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        {% if sdg_results %}
+                        {% set avg_confidence = (sdg_results[0]['confidence'] + 
+                                               (sdg_results[1]['confidence'] if sdg_results|length > 1 else 0) + 
+                                               (sdg_results[2]['confidence'] if sdg_results|length > 2 else 0)) / 
+                                               (sdg_results|length if sdg_results|length > 0 else 1) %}
+                        <span class="confidence-{{ 'high' if avg_confidence >= 0.7 else 'medium' if avg_confidence >= 0.4 else 'low' }}">
+                            {{ (avg_confidence * 100) | round(1) }}%
+                        </span>
+                        {% else %}
+                        <span class="confidence-low">N/A</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="no-history">
+        <div class="no-history-icon">
+            <i class="fas fa-history"></i>
+        </div>
+        <h3>No Analysis History</h3>
+        <p>You haven't analyzed any documents yet. Upload your first PDF to get started!</p>
+        <a href="{{ url_for('index') }}" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Upload Document
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
